@@ -13,5 +13,5 @@
  
  <p>To run the script, open a PowerShell window and run the following command:</p> 
  
- <p>.\attestArcServers.ps1 -subscriptionId YOUR_SUBID -tenant YOUR_TENANTID</p> 
+ <p>.\attestArcServers.ps1 -subscriptionId YOUR_SUBID -tenantId YOUR_TENANTID</p> 
  
