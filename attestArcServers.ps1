@@ -1,7 +1,7 @@
-$subscriptionId    = 'fca3f21e-c534-44b3-a686-662d24006af9' #Your subscription id 
-$resourceGroupName = 'arc-rg' # your Resource Group 
-$machineName       = 'ArcBox-Win2K19' # Arc resource name 
-$location = "canadacentral" # The region where the test machine is arc enabled.
+
+#Kusto query for the Arc Enabled Servers eligible for Software Assurance
+$query = Get-Content .\query.kusto
+
 
 $account       = Connect-AzAccount 
 $context       = Set-azContext -Subscription $subscriptionId 
@@ -13,16 +13,52 @@ $header = @{
    'Authorization'='Bearer ' + $token.AccessToken 
 }
 
-$uri = [System.Uri]::new( "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.HybridCompute/machines/$machineName/licenseProfiles/default?api-version=2023-10-03-preview" ) 
+#Get the Arc Enabled Servers eligible for Software Assurance
+$graphuri = [System.Uri]::new( "https://management.azure.com/providers/Microsoft.ResourceGraph/resources?api-version=2022-10-01" )
 $contentType = "application/json"  
 $data = @{         
-    location = $location; 
-    properties = @{ 
-        softwareAssurance = @{ 
-            softwareAssuranceCustomer= $true; 
-        }; 
-    }; 
+    query = "$query"
 }; 
-$json = $data | ConvertTo-Json; 
-$response = Invoke-RestMethod -Method PUT -Uri $uri.AbsoluteUri -ContentType $contentType -Headers $header -Body $json; 
-$response.properties
+$queryjson = $data | ConvertTo-Json; 
+$graphResponse = Invoke-RestMethod -Method Post -Uri $graphuri.AbsoluteUri -ContentType $contentType -Headers $header -Body $queryjson; 
+
+
+#Set the Software Assurance attestation for the Arc Enabled Servers
+function Set-Attestation {
+    param (
+        [string]$subscriptionId,
+        [string]$resourceGroupName,
+        [string]$machineName,
+        [string]$location
+        )
+    
+    try {
+        $uri = [System.Uri]::new( "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.HybridCompute/machines/$machineName/licenseProfiles/default?api-version=2023-10-03-preview" ) 
+        Write-Host $uri
+        $contentType = "application/json"
+        $data = @{         
+            location = $location; 
+            properties = @{ 
+                softwareAssurance = @{ 
+                    softwareAssuranceCustomer= $true; 
+                }; 
+            }; 
+        };  
+        $json = $data | ConvertTo-Json; 
+        $response = Invoke-RestMethod -Method PUT -Uri $uri.AbsoluteUri -ContentType $contentType -Headers $header -Body $json; 
+        $response.properties
+
+    }
+    catch {
+        "$machineName $_" | Out-File -FilePath .\output\output.txt -Append
+    }
+
+}
+
+#Loop through the Arc Enabled Servers and set the Software Assurance attestation
+$graphResponse.data | ForEach-Object {
+    Write-Host $_.subscriptionId
+    Set-Attestation -subscriptionId $_.subscriptionId -resourceGroupName $_.resourceGroup -machineName $_.name -location $_.location
+}
+
+
