@@ -1,9 +1,13 @@
 
+param(
+    [string]$subscriptionId
+)
+
 #Kusto query for the Arc Enabled Servers eligible for Software Assurance
 $query = Get-Content .\query.kusto
 
 
-$account       = Connect-AzAccount 
+$account       = Connect-AzAccount -Subscription $subscriptionId
 $context       = Set-azContext -Subscription $subscriptionId 
 $profile       = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile 
 $profileClient = [Microsoft.Azure.Commands.ResourceManager.Common.rmProfileClient]::new( $profile ) 
@@ -34,7 +38,6 @@ function Set-Attestation {
     
     try {
         $uri = [System.Uri]::new( "https://management.azure.com/subscriptions/$subscriptionId/resourceGroups/$resourceGroupName/providers/Microsoft.HybridCompute/machines/$machineName/licenseProfiles/default?api-version=2023-10-03-preview" ) 
-        Write-Host $uri
         $contentType = "application/json"
         $data = @{         
             location = $location; 
@@ -50,15 +53,19 @@ function Set-Attestation {
 
     }
     catch {
-        "$machineName $_" | Out-File -FilePath .\output\output.txt -Append
+        "$machineName $_" | Out-File -FilePath .\output.txt -Append
     }
 
 }
 
 #Loop through the Arc Enabled Servers and set the Software Assurance attestation
+$counter = 0
+
 $graphResponse.data | ForEach-Object {
-    Write-Host $_.subscriptionId
+    $counter++
+        
     Set-Attestation -subscriptionId $_.subscriptionId -resourceGroupName $_.resourceGroup -machineName $_.name -location $_.location
+    Write-Progress -Activity "Setting Software Assurance attestation for Arc Enabled Servers" -Status "Processing $_.name" -PercentComplete ($counter / $graphResponse.data.Count * 100)
 }
 
 
