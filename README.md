@@ -7,6 +7,6 @@
  
  
  To run the script, open a PowerShell window and run the following command: 
- .\attestArcServers.ps1
+ .\attestArcServers.ps1 -subscriptionId <SubId>
  
  The script will get the list of Arc-enabled servers that are eligible for Software Assurance and attest the servers by setting the  softwareAssuranceCustomer  property to  true . 
