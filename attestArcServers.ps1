@@ -1,13 +1,14 @@
 
 param(
-    [string]$subscriptionId
+    [string]$subscriptionId,
+    [string]$tenantId
 )
 
 #Kusto query for the Arc Enabled Servers eligible for Software Assurance
 $query = Get-Content .\query.kusto
 
 
-$account       = Connect-AzAccount -Subscription $subscriptionId
+$account       = Connect-AzAccount -Subscription $subscriptionId -Tenant $tenantId
 $context       = Set-azContext -Subscription $subscriptionId 
 $profile       = [Microsoft.Azure.Commands.Common.Authentication.Abstractions.AzureRmProfileProvider]::Instance.Profile 
 $profileClient = [Microsoft.Azure.Commands.ResourceManager.Common.rmProfileClient]::new( $profile ) 
