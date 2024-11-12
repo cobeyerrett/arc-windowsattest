@@ -3,7 +3,7 @@
 ## Description
 
 
-The script uses the  [query.kusto](../query.kusto) file to get the list of Arc-enabled servers that are eligible for Software Assurance. The script then attests the servers by setting the  softwareAssuranceCustomer  property to  true . It is based on the script published on [Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview?branch=main&branchFallbackFrom=pr-en-us-216&tabs=powershell#enrollment) .
+The script uses the  [query.kusto](./query.kusto) file to get the list of Arc-enabled servers that are eligible for Software Assurance. The script then attests the servers by setting the  softwareAssuranceCustomer  property to  true . It is based on the script published on [Microsoft Learn](https://learn.microsoft.com/en-us/azure/azure-arc/servers/windows-server-management-overview?branch=main&branchFallbackFrom=pr-en-us-216&tabs=powershell#enrollment) .
  
 The  *Set-Attestation*  function is used to attest the servers. The function takes the subscription ID, resource group name, machine name, and location as parameters. The function then sends a PUT request to the  Azure Arc API endpoint to attest the server.
 
