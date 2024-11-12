@@ -11,7 +11,9 @@
 
  ## Running the script
  
- <p>To run the script, open a PowerShell window and run the following command:</p> 
+ <p>To run the script, open a Azure CloudShell window and run the following command:</p> 
+
+ <p>git clone https://github.com/cobeyerrett/arc-windowsattest.git</p>
  
  <p>.\attestArcServers.ps1 -subscriptionId YOUR_SUBID -tenantId YOUR_TENANTID</p> 
  
