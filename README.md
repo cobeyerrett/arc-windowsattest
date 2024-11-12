@@ -9,9 +9,9 @@
 <p>The script will get the list of Arc-enabled servers that are eligible for Software Assurance and attest the servers by setting the  softwareAssuranceCustomer  property to  true . </p>
 
 
- ## Running the script
+ ## Running the script 
  
- <p>To run the script, open a Azure CloudShell window and run the following command:</p> 
+ <p>To run the script, open a Powershell (Ideally from CloudShell) window and run the following command:</p> 
 
  <p>git clone https://github.com/cobeyerrett/arc-windowsattest.git</p>
  
