@@ -15,5 +15,5 @@
 
  <p>git clone https://github.com/cobeyerrett/arc-windowsattest.git</p>
  
- <p>.\attestArcServers.ps1 -subscriptionId YOUR_SUBID -tenantId YOUR_TENANTID</p> 
+ <p>.\arc-windowsattest\attestArcServers.ps1 -subscriptionId YOUR_SUBID -tenantId YOUR_TENANTID</p> 
  
