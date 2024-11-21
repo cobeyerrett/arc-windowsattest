@@ -122,7 +122,12 @@ function Set-Attestation {
 
     }
     catch {
-        "$machineName $_" | Out-File -FilePath .\output.txt -Append
+        
+        $json = $_ | ConvertFrom-Json
+        $StatusCode = $json.error.code
+        $StatusException = $json.error.message
+        Write-Host "$machineName StatusCode: $StatusCode StatusDescription: $StatusException"
+        Write-Output "$machineName StatusCode: $StatusCode StatusDescription: $StatusException" | Out-File -FilePath .\output.txt -Append
     }
 
 }
