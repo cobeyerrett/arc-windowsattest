@@ -41,3 +41,4 @@ File/Folder | Description
 ---|---
 [attestArcServers.ps1](./attestArcServers.ps1) | Main powershell file to attest the Windows Software Assurance for Azure Arc connected machines
 [query.kusto](./query.kusto) | The kusto (KQL) query to obtain the Arc-enabled Windows servers to attest 
+[verifySAattestation.kusto](./verifySAattestation.kusto) | The kusto (KQL) query to verify the Arc-enabled Windows servers have been attested 
