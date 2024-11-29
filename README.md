@@ -30,7 +30,11 @@ There is a custom role definition located in the Custom Roles folder in this rep
 
 1. git clone https://github.com/cobeyerrett/arc-windowsattest.git
  2. .\arc-windowsattest\attestArcServers.ps1 -subscriptionId YOUR_SUBID -tenantId YOUR_TENANTID
- 
+
+## Verification of Attestation
+
+The attestation of the Windows SA licensing can be achieved by running the resource graph [verifySAattestation.kusto](./verifySAattestation.kusto) KQL query in your environment.
+
 ## Resources
 
 ### Navigating the source code
