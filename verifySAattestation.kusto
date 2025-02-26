@@ -8,10 +8,10 @@ resources
 | extend softwareAssurance = licenseProfile.softwareAssurance
 | extend productSubscriptionStatus = tostring(licenseProfile.productProfile.subscriptionStatus)
 | extend softwareAssuranceCustomer = licenseProfile.softwareAssurance.softwareAssuranceCustomer
-| extend benefitsStatus = case(
+| extend licenseProfile = case(
     softwareAssuranceCustomer == true, "Activated",
     (licenseStatus =~ "Licensed" and licenseChannel =~ "PGS:TB") or productSubscriptionStatus =~ "Enabled", "Activated via Pay-as-you-go",
     isnull(softwareAssurance) or isnull(softwareAssuranceCustomer) or softwareAssuranceCustomer == false, "Not activated",
     "Not activated")
-| where benefitsStatus == "Activated"
+| where licenseProfile == "Activated"
 | summarize TotalCores = sum(toint(cores)), ArcConnectedServers = count()
